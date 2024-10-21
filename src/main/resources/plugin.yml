@@ -1,0 +1,5 @@
+name: xZXC
+version: '${project.version}'
+main: me.flx.xzxc.XZXC
+api-version: '1.21'
+authors: [flx]
