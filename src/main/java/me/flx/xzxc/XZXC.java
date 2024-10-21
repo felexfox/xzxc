@@ -1,20 +1,18 @@
 package me.flx.xzxc;
 
+import com.google.common.collect.Lists;
+import org.bukkit.Bukkit;
+import org.bukkit.event.Listener;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
 
 public final class XZXC extends JavaPlugin {
 
-    private static XZXC instance;
-
     @Override
     public void onEnable() {
-        // сосиски
-    }
-
-    public static XZXC getPlugin() {
-        return instance;
+        Bukkit.getPluginManager().registerEvents(new OldWorldListener(), this);
     }
 
     @Override
