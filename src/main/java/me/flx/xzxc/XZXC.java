@@ -10,6 +10,7 @@ public final class XZXC extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        // сосиски
     }
 
     public static XZXC getPlugin() {
