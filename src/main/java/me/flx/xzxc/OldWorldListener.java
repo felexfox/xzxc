@@ -6,7 +6,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.generator.BiomeProvider;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -24,7 +23,6 @@ public class OldWorldListener implements Listener {
     private final Map<Player, Long> lastMessageTime265 = new HashMap<>();
 
     private static final long MESSAGE_DELAY = 2000;
-    private static final int EFFECT_DELAY = 1;
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
@@ -101,9 +99,6 @@ public class OldWorldListener implements Listener {
         if (lastTime == null || currentTime - lastTime >= MESSAGE_DELAY) {
             lastMessageTimeMap.put(player, currentTime); // Обновляем время последнего сообщения
             return true;
-        }
-        if (lastTime == null || currentTime - lastTime >= EFFECT_DELAY) {
-            lastMessageTimeMap.put(player, currentTime); // Обновляем время последнего сообщения
         }
         return false;
     }
