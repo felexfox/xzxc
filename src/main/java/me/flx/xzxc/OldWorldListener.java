@@ -64,7 +64,7 @@ public class OldWorldListener implements Listener {
                     player.sendActionBar(mm.deserialize("<color:#3C3D37>Вы были отпрвленны в лимбо.</color>"));
                     sendPlayerMessage(player, "<red><bold>[???]</red><color:#1E201E> >> </color>Ты попал в лимбо.. Тебе просто нужно не пытаться выйти за пределы, которые поставленны тем миром, в котором ты был. Не попадай больше сюда, пожалуйста.");
                     Optional.ofNullable(Bukkit.getWorld("limbo")).ifPresent(world -> player.teleport(
-                            new Location(world, 0, -60, 0)
+                            new Location(world, 0, 75, 0)
                     ));
                     player.removePotionEffect(PotionEffectType.POISON);
                     player.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 300, 5, false, false));
@@ -73,23 +73,18 @@ public class OldWorldListener implements Listener {
             }
         }
         if (player.getWorld().getName().equals("limbo")) {
-            if (y <= -120) {
+            if (y == 70) {
                 player.removePotionEffect(PotionEffectType.DARKNESS);
+                player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, -1, 5, false, false));
                 player.removePotionEffect(PotionEffectType.SLOW_FALLING);
-
-                // 15% шанс не выдавать эффект плавного падения
-                if (Math.random() >= 0.15) {
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 300, 5, false, false));
-                }
-
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 300, 5, false, false));
+            }
+            if (x == 2 || z == 2 || x == -2 || z == -2) {
+                player.removePotionEffect(PotionEffectType.BLINDNESS);
                 Optional.ofNullable(Bukkit.getWorld("world")).ifPresent(world -> player.teleport(
                         new Location(world, 0, 100, 0)
                 ));
-
-                // 15% шанс не выдавать эффект плавного падения после телепортации
-                if (Math.random() >= 0.15) {
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 300, 5, false, false));
-                }
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 300, 5, false, false));
             }
         }
     }
