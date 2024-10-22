@@ -10,9 +10,17 @@ import java.util.List;
 
 public final class XZXC extends JavaPlugin {
 
+    public static XZXC instance;
+
+    public static XZXC getInstance() {
+        return instance;
+    }
+
     @Override
     public void onEnable() {
+        instance = this;
         Bukkit.getPluginManager().registerEvents(new OldWorldListener(), this);
+        new LimboGenerator();
     }
 
     @Override
