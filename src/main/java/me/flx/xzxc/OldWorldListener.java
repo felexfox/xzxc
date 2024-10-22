@@ -22,9 +22,8 @@ public class OldWorldListener implements Listener {
     private final Map<Player, Long> lastMessageTime256 = new HashMap<>();
     private final Map<Player, Long> lastMessageTime260 = new HashMap<>();
     private final Map<Player, Long> lastMessageTime265 = new HashMap<>();
-    private final Map<Player, Long> mlastEffectTime = new HashMap<>();
 
-    private static final long MESSAGE_DELAY = 15000;
+    private static final long MESSAGE_DELAY = 2000;
     private static final int EFFECT_DELAY = 1;
 
     @EventHandler
@@ -37,48 +36,62 @@ public class OldWorldListener implements Listener {
         long currentTime = System.currentTimeMillis(); // Текущее время
 
         // Проверка для координаты X или Z = 256
-        if (x == 256 || z == 256 || x == -256 || z == -256) {
-            if (canSendMessage(lastMessageTime256, player, currentTime)) {
-                sendPlayerMessage(player, "<color:#94FFD8><bold>[" + player.getName() + "]</color> <color:#1E201E> >> </color>Что-то мне не хорошо.. Мне стоит лучше уйти отсюда...");
-            }
-            if (canSendMessage(mlastEffectTime, player, currentTime)) {
-                player.removePotionEffect(PotionEffectType.POISON);
-                player.removePotionEffect(PotionEffectType.DARKNESS);
-            }
+        if (player.getWorld().getName().equals("world")) {
+            if (x == 256 || z == 256 || x == -256 || z == -256) {
+                if (canSendMessage(lastMessageTime256, player, currentTime)) {
+                    sendPlayerMessage(player, "<color:#94FFD8><bold>[" + player.getName() + "]</color> <color:#1E201E> >> </color>Что-то мне не хорошо.. Мне стоит лучше уйти отсюда...");
+                    player.removePotionEffect(PotionEffectType.POISON);
+                    player.removePotionEffect(PotionEffectType.DARKNESS);
+                }
 
+            }
         }
-
         // Проверка для координаты X или Z = 260
-        if (x >= 260 || z >= 260 || x <= -260 || z <= -260) {
-            if (canSendMessage(lastMessageTime260, player, currentTime)) {
-                sendPlayerMessage(player, "<color:#94FFD8><bold>[" + player.getName() + "]</color> <color:#1E201E> >> </color>Мне всё хуже и хуже.. Всё-таки нужно вернуться...");
-                player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, -1, 3, false, false));
-                player.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, -1, 3, false, false));
+        if (player.getWorld().getName().equals("world")) {
+            if (x >= 260 || z >= 260 || x <= -260 || z <= -260) {
+                if (canSendMessage(lastMessageTime260, player, currentTime)) {
+                    sendPlayerMessage(player, "<color:#94FFD8><bold>[" + player.getName() + "]</color> <color:#1E201E> >> </color>Мне всё хуже и хуже.. Всё-таки нужно вернуться...");
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, -1, 3, false, false));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, -1, 3, false, false));
+                }
             }
         }
-
         // Проверка для координаты X или Z = 265
-        if (x >= 265 || z >= 265 || x <= -265 || z <= -265) {
-            if (canSendMessage(lastMessageTime265, player, currentTime)) {
-                sendPlayerMessage(player, "<red>[" + player.getName() + "<red>]<color:#1E201E> >> </color> Мне осталось совсем мало...");
-                player.setHealth(1.0);  // Устанавливаем здоровье на 0.5 сердца
-                player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, -1, 5, false, false));
-                player.sendActionBar(mm.deserialize("<color:#3C3D37>Вы были отпрвленны в лимбо.</color>"));
-                sendPlayerMessage(player, "<red><bold>[???]</red><color:#1E201E> >> </color>Ты попал в лимбо.. Тебе просто нужно не пытаться выйти за пределы, которые поставленны тем миром, в котором ты был. Не попадай больше сюда, пожалуйста.");
-                Optional.ofNullable(Bukkit.getWorld("limbo")).ifPresent(world -> player.teleport(
-                        new Location(world, 0, 100, 0)
-                ));
-                player.removePotionEffect(PotionEffectType.SLOW_FALLING);
-                player.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 15, 5, false, false));
+        if (player.getWorld().getName().equals("world")) {
+            if (x >= 265 || z >= 265 || x <= -265 || z <= -265) {
+                if (canSendMessage(lastMessageTime265, player, currentTime)) {
+                    sendPlayerMessage(player, "<red>[" + player.getName() + "<red>]<color:#1E201E> >> </color> Мне осталось совсем мало...");
+                    player.setHealth(1.0);  // Устанавливаем здоровье на 0.5 сердца
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, -1, 5, false, false));
+                    player.sendActionBar(mm.deserialize("<color:#3C3D37>Вы были отпрвленны в лимбо.</color>"));
+                    sendPlayerMessage(player, "<red><bold>[???]</red><color:#1E201E> >> </color>Ты попал в лимбо.. Тебе просто нужно не пытаться выйти за пределы, которые поставленны тем миром, в котором ты был. Не попадай больше сюда, пожалуйста.");
+                    Optional.ofNullable(Bukkit.getWorld("limbo")).ifPresent(world -> player.teleport(
+                            new Location(world, 0, -60, 0)
+                    ));
+                    player.removePotionEffect(PotionEffectType.POISON);
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 300, 5, false, false));
 
+                }
             }
         }
         if (player.getWorld().getName().equals("limbo")) {
-            if (y == 0) {
-                player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 15, 5, false, false));
+            if (y <= -120) {
+                player.removePotionEffect(PotionEffectType.DARKNESS);
+                player.removePotionEffect(PotionEffectType.SLOW_FALLING);
+
+                // 15% шанс не выдавать эффект плавного падения
+                if (Math.random() >= 0.15) {
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 300, 5, false, false));
+                }
+
                 Optional.ofNullable(Bukkit.getWorld("world")).ifPresent(world -> player.teleport(
                         new Location(world, 0, 100, 0)
                 ));
+
+                // 15% шанс не выдавать эффект плавного падения после телепортации
+                if (Math.random() >= 0.15) {
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 300, 5, false, false));
+                }
             }
         }
     }
