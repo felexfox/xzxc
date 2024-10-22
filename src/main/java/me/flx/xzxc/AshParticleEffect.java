@@ -41,9 +41,9 @@ public class AshParticleEffect {
 
         // Генерация 20 частиц вокруг игрока в радиусе 10 блоков
         for (int i = 0; i < 20; i++) {
-            double offsetX = (random.nextDouble() - 0.5) * 10; // Случайное смещение по X
+            double offsetX = (random.nextDouble() - 0.5) * 5; // Случайное смещение по X
             double offsetY = random.nextDouble() * 5; // Случайное смещение по Y
-            double offsetZ = (random.nextDouble() - 0.5) * 10; // Случайное смещение по Z
+            double offsetZ = (random.nextDouble() - 0.5) * 5; // Случайное смещение по Z
 
             Location particleLocation = playerLocation.clone().add(offsetX, offsetY, offsetZ);
             world.spawnParticle(Particle.ASH, particleLocation, 1, 0, 0, 0, 0);
