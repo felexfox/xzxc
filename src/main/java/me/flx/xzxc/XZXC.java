@@ -20,6 +20,8 @@ public final class XZXC extends JavaPlugin {
     public void onEnable() {
         instance = this;
         Bukkit.getPluginManager().registerEvents(new OldWorldListener(), this);
+        AshParticleEffect ashParticleEffect = new AshParticleEffect(this);
+        ashParticleEffect.startAshEffect();
         new LimboGenerator();
     }
 
