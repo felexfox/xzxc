@@ -2,9 +2,11 @@ package me.flx.xzxc;
 
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.*;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -35,16 +37,25 @@ public class OldWorldListener implements Listener {
     private static final long MESSAGE_DELAY = 2000;
 
     @EventHandler
-    public void onPlayerMove(PlayerMoveEvent event) {
-        Player player = event.getPlayer();
+    public void onPlayerJoin(PlayerJoinEvent join){
+        Player player = join.getPlayer();
+        player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(12);
+    }
+
+    @EventHandler
+    public void onPlayerMove(PlayerMoveEvent move) {
+        Player player = move.getPlayer();
         Location location = player.getLocation();
         int x = location.getBlockX();
         int z = location.getBlockZ();
         int y = location.getBlockY();
         long currentTime = System.currentTimeMillis(); // Текущее время
 
-        // Проверка для координаты X или Z = 256
         if (player.getWorld().getName().equals("world")) {
+            if (x == 0 && z == 0 && y == 99){
+                player.playSound(player.getLocation(), "custom.player.teleport", 0.3F, 1.0F);
+                player.removePotionEffect(PotionEffectType.BLINDNESS);
+            }
             if (x == 256 || z == 256 || x == -256 || z == -256) {
                 player.setViewDistance(8);
                 if (canSendMessage(lastMessageTime256, player, currentTime)) {
@@ -52,11 +63,7 @@ public class OldWorldListener implements Listener {
                     player.removePotionEffect(PotionEffectType.POISON);
                     player.removePotionEffect(PotionEffectType.DARKNESS);
                 }
-
             }
-        }
-        // Проверка для координаты X или Z = 260
-        if (player.getWorld().getName().equals("world")) {
             if (x == 260 || z == 260 || x == -260 || z == -260) {
                 player.setViewDistance(2);
                 if (canSendMessage(lastMessageTime260, player, currentTime)) {
@@ -65,9 +72,6 @@ public class OldWorldListener implements Listener {
                     player.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, -1, 3, false, false));
                 }
             }
-        }
-
-        if (player.getWorld().getName().equals("world")) {
             if (x == 263 || z == 263 || x == -263 || z == -263) {
                 if (canSendMessage(lastMessageTime265, player, currentTime)) {
                     sendPlayerMessage(player, "<red><bold>[" + player.getName() + "]</red><color:#1E201E> >> </color> Мне осталось совсем мало...");
@@ -84,7 +88,7 @@ public class OldWorldListener implements Listener {
                 player.removePotionEffect(PotionEffectType.POISON);
 
                 scheduler.runTaskLater(plugin, () -> {
-                    player.playSound(player.getLocation(), "custom.player.teleport", 0.3F, 1.0F);
+                    player.playSound(player.getLocation(), "custom.player.teleport", 0.2F, 1.3F);
                     Optional.ofNullable(Bukkit.getWorld("limbo")).ifPresent(world -> player.teleport(
                             new Location(world, 0.5, 75, 0.5)
                     ));
@@ -101,17 +105,14 @@ public class OldWorldListener implements Listener {
                 player.removePotionEffect(PotionEffectType.SLOW_FALLING);
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 80, 5, false, false));
             }
-            if (x == 1 || z == 1 || x == -1 || z == -1) {
+            if (x == 1 || z == 1 || x == -1 || z == -1 && y == 50) {
                 scheduler.runTaskLater(plugin, () -> {
-                    player.playSound(player.getLocation(), "custom.player.teleport", 0.3F, 1.0F);
-                    player.sendTitle("ƀ", "", 10, 20, 10);
+                    player.playSound(player.getLocation(), "custom.player.teleport", 0.2F, 1.3F);
+                    player.sendTitle("ƀ", "", 20, 60, 20);
                 }, 20);
             }
-            if (x == 3 || z == 3 || x == -3 || z == -3) {
+            if (x == 3 || z == 3 || x == -3 || z == -3 && y == 50) {
                 player.setViewDistance(8);
-                player.removePotionEffect(PotionEffectType.BLINDNESS);
-
-
                 scheduler.runTaskLater(plugin, () ->{
                     for (Player player1 : Bukkit.getOnlinePlayers()) {
                         player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 100, 3, false, false));
@@ -126,7 +127,6 @@ public class OldWorldListener implements Listener {
                             player1.sendActionBar("unluck");
                         }
                     }
-
                 }, 20);
             }
         }
