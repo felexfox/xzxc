@@ -1,14 +1,10 @@
 package me.flx.xzxc;
 
-import com.google.common.collect.Lists;
+import me.flx.xzxc.Commands.FlxCommandExecutor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.List;
 
 public final class XZXC extends JavaPlugin {
 
@@ -27,15 +23,15 @@ public final class XZXC extends JavaPlugin {
         artifacts.RegisterRecipes();
 
         Artifacts customItems = new Artifacts(this);
-        CustomGiveCommand giveCommand = new CustomGiveCommand(customItems);
 
         Bukkit.getPluginManager().registerEvents(new OldWorldListener(this), this);
         AshParticleEffect ashParticleEffect = new AshParticleEffect(this);
         ashParticleEffect.startAshEffect();
         new LimboGenerator();
 
-        getCommand("flx").setExecutor(giveCommand);
-        getCommand("flx").setTabCompleter(new CustomGiveTabCompleter());
+        FlxCommandExecutor flxCommandExecutor = new FlxCommandExecutor(customItems);
+        this.getCommand("flx").setExecutor(flxCommandExecutor);
+        this.getCommand("flx").setTabCompleter(flxCommandExecutor);
 
         startInventoryCheck();
     }
